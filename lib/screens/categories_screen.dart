@@ -37,11 +37,10 @@ class CategoriesScreen extends StatelessWidget {
                 var category = CategoryModel.getCategoriesList()[index];
                 return InkWell(
                   onTap: () {
-                    provider.changeCategoryId(category.id);
+                    provider.getSourcesData(category.id);
                     provider.changeScreen(1);
                   },
-                  child: categoryItem(
-                      index, category),
+                  child: categoryItem(index, category),
                 );
               },
               itemCount: 7,
@@ -51,6 +50,4 @@ class CategoriesScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }

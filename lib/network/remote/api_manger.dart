@@ -20,7 +20,6 @@ class APIManger {
     Uri uri = Uri.https(BASE_URL, 'v2/top-headlines/', {
       'apiKey': API_KEY,
       'category': categoryID,
-      'language': 'en',
     });
     Response response = await http.get(uri);
     dynamic json = jsonDecode(response.body);
@@ -30,7 +29,6 @@ class APIManger {
       String source) async {
     Uri uri = Uri.https(BASE_URL, 'v2/top-headlines/', {
       'apiKey': API_KEY,
-      'language': 'en',
       'sources': source
     });
     Response response = await http.get(uri);
@@ -39,9 +37,8 @@ class APIManger {
   }
 
   static Future<NewsModel> searchForNews(String key)async {
-    Uri uri = Uri.https(BASE_URL, 'v2/top-headlines/', {
+    Uri uri = Uri.https(BASE_URL, 'v2/everything/', {
       'apiKey': API_KEY,
-      'language': 'en',
       'q':key
     });
     Response response = await http.get(uri);

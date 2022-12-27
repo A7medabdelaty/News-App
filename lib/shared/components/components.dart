@@ -68,30 +68,12 @@ Widget articleItemCard(Articles model) {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          children: [
-            if (model.author != null)
-              Text(
-                model.author ?? '',
-                style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    overflow: TextOverflow.ellipsis),
-              ),
-            if (model.author != null)
-              const SizedBox(
-                width: 8,
-              ),
-            Expanded(
-              child: Text(
-                model.source?.name ?? '',
-                style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    overflow: TextOverflow.ellipsis),
-              ),
-            ),
-          ],
+        Text(
+          model.source?.name ?? '',
+          style: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+              overflow: TextOverflow.ellipsis),
         ),
         const SizedBox(
           height: 10,
@@ -106,7 +88,6 @@ Widget articleItemCard(Articles model) {
         Text(
           model.publishedAt?.substring(0, 10) ?? '',
           textAlign: TextAlign.end,
-          style: TextStyle(),
         ),
       ],
     ),
@@ -187,4 +168,3 @@ Widget customDrawer(context) {
     )),
   );
 }
-

@@ -5,12 +5,12 @@ import 'package:news_app/shared/styles/colors.dart';
 import 'package:provider/provider.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  SearchScreen({Key? key}) : super(key: key);
   static const String routeName = 'search screen';
+  final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController searchController = TextEditingController();
     MainProvider provider = Provider.of<MainProvider>(context);
     return Scaffold(
         appBar: AppBar(
@@ -31,9 +31,9 @@ class SearchScreen extends StatelessWidget {
             child: TextFormField(
               controller: searchController,
               onChanged: (value) {
-                if (value.isNotEmpty) {
-                  provider.searchForNews(value.toString());
-                }
+                searchController.text.isEmpty
+                    ? provider.emptySearchList()
+                    : provider.searchForNews(value.toString());
               },
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -58,12 +58,28 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            return articleItemCard(provider.searchList[index]);
-          },
-          itemCount: provider.searchList.length,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            provider.searchList.isEmpty
+                ? const Center(
+                    child: Text(
+                    'No Result',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.grey),
+                  ))
+                : Expanded(
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return articleItemCard(provider.searchList[index]);
+                      },
+                      itemCount: provider.searchList.length,
+                    ),
+                  ),
+          ],
         ));
   }
 }

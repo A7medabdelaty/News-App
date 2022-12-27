@@ -10,9 +10,18 @@ class MainProvider extends ChangeNotifier {
   String sourceId = '';
   String searchKey = '';
   List<Articles> searchList = [];
+  List<Sources> sourcesList = [];
 
-  Future<SourcesResponse> getSourcesData() async {
-    return await APIManger.getSourcesByCategory(categoryId);
+  Future<SourcesResponse> getSourcesData(categoryId) async {
+    this.categoryId = categoryId;
+    sourcesList = [];
+    sourceId = '';
+    var data = await APIManger.getSourcesByCategory(categoryId);
+    data.sources?.forEach((element) {
+      sourcesList.add(element);
+    });
+    notifyListeners();
+    return data;
   }
 
   Future<NewsModel> getNewsDataByCategory() async {
@@ -20,6 +29,9 @@ class MainProvider extends ChangeNotifier {
   }
 
   Future<NewsModel> getNewsDataBySource() async {
+    if (sourceId.isEmpty) {
+      sourceId = sourcesList[0].id ?? '';
+    }
     return await APIManger.getNewsArticlesBySource(sourceId);
   }
 
@@ -30,13 +42,15 @@ class MainProvider extends ChangeNotifier {
 
   void searchForNews(searchKey) async {
     NewsModel data = await APIManger.searchForNews(searchKey);
+    searchList = [];
     data.articles?.forEach((element) {
       searchList.add(element);
     });
+    notifyListeners();
   }
 
-  void changeCategoryId(categoryId) {
-    this.categoryId = categoryId;
+  void emptySearchList() {
+    searchList = [];
     notifyListeners();
   }
 
@@ -48,7 +62,7 @@ class MainProvider extends ChangeNotifier {
   int currentScreenIndex = 0;
   List<Widget> screens = [
     const CategoriesScreen(),
-    const HomeScreen(),
+    HomeScreen(),
   ];
 
   void changeScreen(int index) {
